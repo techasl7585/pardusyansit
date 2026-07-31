@@ -20,10 +20,6 @@
 Pardus Yansıt, bilgisayar ekranınızı televizyon, projeksiyon ve diğer uyumlu
 kablosuz ekranlara kolayca yansıtmanızı sağlar.
 
-Uygulama GNOME hızlı ayarlar paneline **Yansıt** kutucuğu ekler. Kullanıcı ayrı
-bir uygulama aramak veya gerekli sistem bileşenlerini tek tek kurmak zorunda
-kalmadan kablosuz ekran penceresine doğrudan ulaşabilir.
-
 Pardus Yansıt, yansıtma motoru olarak açık kaynaklı
 [GNOME Network Displays](https://gitlab.gnome.org/GNOME/gnome-network-displays)
 kullanır; Pardus bütünleşmesi, hızlı ayar eklentisi, temiz kurulum
