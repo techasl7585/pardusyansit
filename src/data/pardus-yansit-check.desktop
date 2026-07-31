@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=Pardus Yansıt Sistem Denetimi
+Name[tr]=Pardus Yansıt Sistem Denetimi
+Comment=Kablosuz ekran uyumluluğunu denetleyin
+Comment[tr]=Wi-Fi Direct ve ekran paylaşım bileşenlerini denetleyin
+Exec=pardus-yansit --check-gui
+Icon=pardus-yansit
+Terminal=false
+Type=Application
+Categories=Settings;System;
+Keywords=screen;cast;check;wifi;miracast;
+Keywords[tr]=ekran;yansıt;denetim;wifi;miracast;
+StartupNotify=true
+

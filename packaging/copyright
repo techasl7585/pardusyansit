@@ -1,0 +1,19 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: Pardus Yansıt
+Source: https://github.com/techasl7585/pardusyansit
+
+Files: *
+Copyright: 2026 Pardus Yansıt Geliştiricileri
+License: GPL-3+
+ Bu program özgür bir yazılımdır: Özgür Yazılım Vakfı tarafından yayımlanan
+ GNU Genel Kamu Lisansı'nın 3. sürümü veya isteğe bağlı olarak daha sonraki
+ bir sürümü koşulları altında yeniden dağıtılabilir ve değiştirilebilir.
+ .
+ Debian ve Pardus sistemlerinde lisans metni
+ /usr/share/common-licenses/GPL-3 konumundadır.
+
+Files: bundled-dependency
+Copyright: GNOME Network Displays contributors
+License: GPL-3+
+ GNOME Network Displays bu pakete kopyalanmaz. Pardus deposundaki özgün paket
+ bağımlılık olarak kurulur ve kendi telif/lisans bilgilerini korur.

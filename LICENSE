@@ -1,0 +1,16 @@
+Pardus Yansıt is free software licensed under the GNU General Public License,
+version 3 or (at your option) any later version (GPL-3.0-or-later).
+
+You may redistribute and/or modify this software under those terms. This
+software is distributed without any warranty; without even the implied
+warranty of merchantability or fitness for a particular purpose.
+
+The complete GNU GPL version 3 license text is available at:
+https://www.gnu.org/licenses/gpl-3.0.txt
+
+On Pardus and Debian systems, a local copy is available at:
+/usr/share/common-licenses/GPL-3
+
+GNOME Network Displays is not copied into this repository. It is installed as
+an operating-system package dependency and retains its own copyright notices
+and GPL license.

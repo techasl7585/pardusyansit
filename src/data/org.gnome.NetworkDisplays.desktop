@@ -1,0 +1,15 @@
+[Desktop Entry]
+Name=Pardus Yansıt
+Name[tr]=Pardus Yansıt
+Comment=Ekranınızı kablosuz ekranlara yansıtın
+Comment[tr]=Ekranınızı Miracast veya Chromecast cihazlarına kablosuz yansıtın
+Exec=pardus-yansit
+Icon=pardus-yansit
+Terminal=false
+Type=Application
+Categories=AudioVideo;Network;GNOME;
+Keywords=screen;cast;display;miracast;chromecast;yansıt;ekran;kablosuz;
+Keywords[tr]=ekran;yansıt;kablosuz;miracast;chromecast;televizyon;
+StartupNotify=true
+X-GNOME-UsesNotifications=true
+

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Pardus Yansıt Hızlı Ayar Etkinleştiricisi
+Exec=/usr/lib/pardus-yansit/enable-extension
+OnlyShowIn=GNOME;
+NoDisplay=true
+Terminal=false
+X-GNOME-Autostart-enabled=true
+X-GNOME-Autostart-Delay=3
+

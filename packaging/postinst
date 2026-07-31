@@ -1,0 +1,38 @@
+#!/bin/sh
+set -e
+
+if command -v update-desktop-database >/dev/null 2>&1; then
+    update-desktop-database -q /usr/share/applications || true
+fi
+
+if command -v gtk-update-icon-cache >/dev/null 2>&1; then
+    gtk-update-icon-cache -q -t -f /usr/share/icons/hicolor || true
+fi
+
+# Açık GNOME oturumlarında eklentiyi hemen etkinleştirmeyi dene. GNOME Shell
+# yeni sistem eklentisini oturum sırasında henüz görmüyorsa XDG autostart
+# yardımcısı bir sonraki girişte işlemi kullanıcı müdahalesi olmadan tamamlar.
+if command -v runuser >/dev/null 2>&1 && command -v pgrep >/dev/null 2>&1; then
+    for runtime_dir in /run/user/[0-9]*; do
+        [ -d "$runtime_dir" ] || continue
+        [ -S "$runtime_dir/bus" ] || continue
+
+        uid="${runtime_dir##*/}"
+        [ "$uid" -ge 1000 ] 2>/dev/null || continue
+        pgrep -u "$uid" -x gnome-shell >/dev/null 2>&1 || continue
+
+        passwd_entry="$(getent passwd "$uid" 2>/dev/null || true)"
+        user="$(printf '%s' "$passwd_entry" | cut -d: -f1)"
+        home_dir="$(printf '%s' "$passwd_entry" | cut -d: -f6)"
+        [ -n "$user" ] && [ -d "$home_dir" ] || continue
+
+        runuser -u "$user" -- env \
+            HOME="$home_dir" \
+            XDG_CURRENT_DESKTOP=GNOME \
+            XDG_RUNTIME_DIR="$runtime_dir" \
+            DBUS_SESSION_BUS_ADDRESS="unix:path=$runtime_dir/bus" \
+            /usr/lib/pardus-yansit/enable-extension >/dev/null 2>&1 || true
+    done
+fi
+
+exit 0

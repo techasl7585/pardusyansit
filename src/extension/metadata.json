@@ -1,0 +1,8 @@
+{
+  "uuid": "pardus-yansit@pardus.org.tr",
+  "name": "Pardus Yansıt",
+  "description": "Pardus kablosuz ekran paylaşımını GNOME hızlı ayarlar paneline ekler.",
+  "shell-version": ["45", "46", "47", "48", "49"],
+  "version": 1,
+  "url": "https://github.com/techasl7585/pardusyansit"
+}

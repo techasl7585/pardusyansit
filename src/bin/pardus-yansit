@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+readonly VERSION="0.1.0"
+readonly EXTENSION_UUID="pardus-yansit@pardus.org.tr"
+
+show_error() {
+    local message="$1"
+    if command -v zenity >/dev/null 2>&1 && [[ -n "${DISPLAY:-}${WAYLAND_DISPLAY:-}" ]]; then
+        zenity --error --title="Pardus Yansıt" --width=480 --text="$message" 2>/dev/null || true
+    else
+        printf 'Pardus Yansıt: %s\n' "$message" >&2
+    fi
+}
+
+enable_extension_if_possible() {
+    if [[ -x /usr/lib/pardus-yansit/enable-extension ]]; then
+        /usr/lib/pardus-yansit/enable-extension >/dev/null 2>&1 || true
+    elif command -v gnome-extensions >/dev/null 2>&1; then
+        gnome-extensions enable "$EXTENSION_UUID" >/dev/null 2>&1 || true
+    fi
+}
+
+case "${1:-}" in
+    --check)
+        exec /usr/bin/pardus-yansit-check
+        ;;
+    --check-gui)
+        exec /usr/bin/pardus-yansit-check --gui
+        ;;
+    --version|-v)
+        printf 'Pardus Yansıt %s\n' "$VERSION"
+        exit 0
+        ;;
+    --help|-h)
+        cat <<'EOF'
+Kullanım: pardus-yansit [SEÇENEK]
+
+  --check       Sistem uygunluğunu terminalde denetle
+  --check-gui   Sistem uygunluğunu grafik pencerede denetle
+  --version     Sürümü göster
+  --help        Bu yardımı göster
+EOF
+        exit 0
+        ;;
+esac
+
+enable_extension_if_possible
+
+if ! command -v gnome-network-displays >/dev/null 2>&1; then
+    show_error $'Kablosuz ekran motoru bulunamadı. Paketi şu komutla onarın:\n\nsudo apt install --reinstall pardus-yansit'
+    exit 127
+fi
+
+exec gnome-network-displays "$@"

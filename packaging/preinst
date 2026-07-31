@@ -1,0 +1,17 @@
+#!/bin/sh
+set -e
+
+TARGET=/usr/share/applications/org.gnome.NetworkDisplays.desktop
+DIVERT=/usr/share/applications/org.gnome.NetworkDisplays.desktop.pardus-original
+
+case "$1" in
+    install|upgrade)
+        if ! dpkg-divert --listpackage "$TARGET" 2>/dev/null | grep -qx 'pardus-yansit'; then
+            dpkg-divert --package pardus-yansit --add --rename \
+                --divert "$DIVERT" "$TARGET"
+        fi
+        ;;
+esac
+
+exit 0
+

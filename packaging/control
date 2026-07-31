@@ -1,0 +1,14 @@
+Package: pardus-yansit
+Version: 0.1.0
+Section: gnome
+Priority: optional
+Architecture: all
+Maintainer: Pardus Yansıt Geliştiricileri <techasl7585@users.noreply.github.com>
+Depends: gnome-network-displays (>= 0.90), gnome-shell (>= 45), network-manager, pipewire, wireplumber, xdg-desktop-portal-gnome, iw, zenity
+Recommends: avahi-daemon, gstreamer1.0-libav, gstreamer1.0-plugins-bad, gstreamer1.0-plugins-ugly
+Enhances: gnome-network-displays, gnome-shell
+Homepage: https://github.com/techasl7585/pardusyansit
+Description: Pardus kablosuz ekran yansıtma bütünleşmesi
+ Pardus Yansıt, GNOME hızlı ayarlar paneline kablosuz ekran kutucuğu ekler,
+ GNOME Network Displays motorunu Pardus adı ve simgesiyle bütünleştirir ve
+ Wi-Fi Direct, PipeWire ile ekran paylaşım bileşenlerini denetler.

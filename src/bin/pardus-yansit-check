@@ -1,0 +1,126 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+declare -a RESULTS=()
+FAILURES=0
+WARNINGS=0
+
+add_ok() {
+    RESULTS+=("✓ $1")
+}
+
+add_warn() {
+    RESULTS+=("⚠ $1")
+    WARNINGS=$((WARNINGS + 1))
+}
+
+add_fail() {
+    RESULTS+=("✗ $1")
+    FAILURES=$((FAILURES + 1))
+}
+
+if command -v gnome-network-displays >/dev/null 2>&1; then
+    add_ok "Kablosuz ekran motoru kurulu"
+else
+    add_fail "gnome-network-displays paketi bulunamadı"
+fi
+
+if command -v gnome-shell >/dev/null 2>&1; then
+    GNOME_VERSION="$(gnome-shell --version 2>/dev/null || true)"
+    GNOME_MAJOR="$(printf '%s' "$GNOME_VERSION" | sed -n 's/[^0-9]*\([0-9][0-9]*\).*/\1/p')"
+    if [[ -n "$GNOME_MAJOR" ]] && (( GNOME_MAJOR >= 45 && GNOME_MAJOR <= 49 )); then
+        add_ok "$GNOME_VERSION destekleniyor"
+    elif [[ -n "$GNOME_MAJOR" ]]; then
+        add_warn "$GNOME_VERSION bu sürümde doğrulanmadı (hedef: 45–49)"
+    else
+        add_warn "GNOME Shell sürümü okunamadı"
+    fi
+else
+    add_fail "GNOME Shell bulunamadı"
+fi
+
+if [[ "${XDG_CURRENT_DESKTOP:-}" == *GNOME* ]]; then
+    add_ok "GNOME masaüstü oturumu etkin"
+else
+    add_warn "Geçerli masaüstü GNOME olarak görünmüyor"
+fi
+
+if [[ "${XDG_SESSION_TYPE:-}" == "wayland" ]]; then
+    add_ok "Wayland oturumu etkin"
+elif [[ -n "${XDG_SESSION_TYPE:-}" ]]; then
+    add_warn "${XDG_SESSION_TYPE} oturumu kullanılıyor; Wayland önerilir"
+else
+    add_warn "Oturum türü belirlenemedi"
+fi
+
+if systemctl is-active --quiet NetworkManager.service 2>/dev/null; then
+    add_ok "NetworkManager çalışıyor"
+else
+    add_fail "NetworkManager çalışmıyor"
+fi
+
+if command -v nmcli >/dev/null 2>&1 && nmcli -t -f TYPE,STATE device status 2>/dev/null | grep -q '^wifi:'; then
+    add_ok "Kablosuz ağ aygıtı algılandı"
+else
+    add_fail "Kablosuz ağ aygıtı algılanamadı"
+fi
+
+if command -v iw >/dev/null 2>&1; then
+    if iw list 2>/dev/null | grep -Eq 'P2P-client|P2P-device'; then
+        add_ok "Wi-Fi Direct (P2P) desteği algılandı"
+    else
+        add_warn "Wi-Fi Direct desteği algılanamadı; Miracast çalışmayabilir"
+    fi
+else
+    add_warn "iw aracı bulunamadığı için Wi-Fi Direct denetlenemedi"
+fi
+
+if systemctl --user is-active --quiet pipewire.service 2>/dev/null || pgrep -x pipewire >/dev/null 2>&1; then
+    add_ok "PipeWire çalışıyor"
+else
+    add_fail "PipeWire çalışmıyor"
+fi
+
+if systemctl --user is-active --quiet wireplumber.service 2>/dev/null || pgrep -x wireplumber >/dev/null 2>&1; then
+    add_ok "WirePlumber çalışıyor"
+else
+    add_warn "WirePlumber çalışmıyor veya algılanamadı"
+fi
+
+if pgrep -f 'xdg-desktop-portal($| )' >/dev/null 2>&1; then
+    add_ok "Ekran paylaşım portalı çalışıyor"
+else
+    add_warn "Ekran paylaşım portalı henüz çalışmıyor veya algılanamadı"
+fi
+
+if command -v gnome-extensions >/dev/null 2>&1 && \
+   gnome-extensions info pardus-yansit@pardus.org.tr >/dev/null 2>&1; then
+    EXTENSION_STATE="$(gnome-extensions info pardus-yansit@pardus.org.tr 2>/dev/null | sed -n 's/^[[:space:]]*State:[[:space:]]*//p')"
+    if [[ "$EXTENSION_STATE" == "ENABLED" ]]; then
+        add_ok "Hızlı ayarlar eklentisi etkin"
+    else
+        add_warn "Hızlı ayarlar eklentisi kurulu fakat durumu: ${EXTENSION_STATE:-bilinmiyor}"
+    fi
+else
+    add_warn "Hızlı ayarlar eklentisi bu oturumda henüz yüklenmedi"
+fi
+
+REPORT=$'Pardus Yansıt Sistem Denetimi\n\n'
+for result in "${RESULTS[@]}"; do
+    REPORT+="$result"$'\n'
+done
+REPORT+=$'\n'"Sonuç: $FAILURES hata, $WARNINGS uyarı"
+
+if [[ "${1:-}" == "--gui" ]] && command -v zenity >/dev/null 2>&1; then
+    if (( FAILURES == 0 )); then
+        zenity --info --title="Pardus Yansıt Sistem Denetimi" --width=620 --text="$REPORT" 2>/dev/null || true
+    else
+        zenity --warning --title="Pardus Yansıt Sistem Denetimi" --width=620 --text="$REPORT" 2>/dev/null || true
+    fi
+else
+    printf '%b\n' "$REPORT"
+fi
+
+if (( FAILURES > 0 )); then
+    exit 1
+fi

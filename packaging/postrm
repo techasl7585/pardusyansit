@@ -1,0 +1,25 @@
+#!/bin/sh
+set -e
+
+TARGET=/usr/share/applications/org.gnome.NetworkDisplays.desktop
+DIVERT=/usr/share/applications/org.gnome.NetworkDisplays.desktop.pardus-original
+
+case "$1" in
+    remove|purge|abort-install)
+        if dpkg-divert --listpackage "$TARGET" 2>/dev/null | grep -qx 'pardus-yansit'; then
+            dpkg-divert --package pardus-yansit --remove --rename \
+                --divert "$DIVERT" "$TARGET"
+        fi
+        ;;
+esac
+
+if command -v update-desktop-database >/dev/null 2>&1; then
+    update-desktop-database -q /usr/share/applications || true
+fi
+
+if command -v gtk-update-icon-cache >/dev/null 2>&1; then
+    gtk-update-icon-cache -q -t -f /usr/share/icons/hicolor || true
+fi
+
+exit 0
+
