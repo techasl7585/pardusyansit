@@ -17,9 +17,8 @@
 
 ## Proje hakkında
 
-Pardus Yansıt; bilgisayar ekranını Miracast veya Chromecast destekli televizyon,
-projeksiyon ve kablosuz ekranlara aktarmayı Pardus masaüstünün doğal bir parçası
-haline getirir.
+Pardus Yansıt, bilgisayar ekranınızı televizyon, projeksiyon ve diğer uyumlu
+kablosuz ekranlara kolayca yansıtmanızı sağlar.
 
 Uygulama GNOME hızlı ayarlar paneline **Yansıt** kutucuğu ekler. Kullanıcı ayrı
 bir uygulama aramak veya gerekli sistem bileşenlerini tek tek kurmak zorunda
